@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NutriAI — Smart Nutrition Assistant</title>
+    <meta name="description" content="AI-powered nutrition assistant that helps you make healthier food choices with real-time meal analysis and personalized recommendations." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ═══ ANIMATED BACKGROUND ═══ -->
+<div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+</div>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar-glass" id="navbar">
+    <div class="nav-inner container">
+        <a href="/" class="nav-brand">
+            <span class="brand-icon">🥗</span>
+            <span class="brand-text">Nutri<span class="brand-accent">AI</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="#analyzer" class="nav-link active" data-section="analyzer">Analyze</a>
+            <a href="#history" class="nav-link" data-section="history">History</a>
+            <a href="#insights" class="nav-link" data-section="insights">Insights</a>
+        </div>
+        <div class="nav-goal">
+            <select id="goalSelect" class="goal-select">
+                <option value="maintenance">⚖️ Maintenance</option>
+                <option value="weight-loss">🏋️ Weight Loss</option>
+                <option value="muscle-gain">💪 Muscle Gain</option>
+                <option value="diabetes-control">🩺 Diabetes Control</option>
+                <option value="heart-health">❤️ Heart Health</option>
+            </select>
+        </div>
+    </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<header class="hero" id="hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-badge">✨ AI-Powered Nutrition</div>
+            <h1 class="hero-title">
+                Make Every Bite<br />
+                <span class="gradient-text">Count</span>
+            </h1>
+            <p class="hero-sub">Analyze meals instantly, detect unhealthy patterns, and get personalized recommendations — all powered by real nutrition data.</p>
+            <a href="#analyzer" class="hero-cta">
+                Start Analyzing
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-card">
+                <div class="stat-num" id="statMeals">0</div>
+                <div class="stat-label">Meals Logged</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">35+</div>
+                <div class="stat-label">Foods in DB</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">2</div>
+                <div class="stat-label">Nutrition APIs</div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ═══ ANALYZER SECTION ═══ -->
+<section class="section" id="analyzer">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">🍽️ Meal Analyzer</h2>
+            <p class="section-sub">Enter what you ate or plan to eat</p>
+        </div>
+
+        <div class="analyzer-grid">
+            <!-- Input Card -->
+            <div class="glass-card input-card">
+                <div class="form-group">
+                    <label for="foodInput" class="form-label">What did you eat?</label>
+                    <div class="search-wrapper">
+                        <input type="text" id="foodInput" class="form-input" placeholder="e.g. chicken biryani, banana, pizza..." autocomplete="off" />
+                        <div class="search-icon">🔍</div>
+                    </div>
+                    <div id="searchSuggestions" class="suggestions-dropdown"></div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="mealType" class="form-label">Meal Type</label>
+                        <select id="mealType" class="form-select">
+                            <option value="breakfast">🌅 Breakfast</option>
+                            <option value="lunch" selected>🌞 Lunch</option>
+                            <option value="dinner">🌙 Dinner</option>
+                            <option value="snack">🍿 Snack</option>
+                        </select>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="moodSelect" class="form-label">Mood</label>
+                        <select id="moodSelect" class="form-select">
+                            <option value="">— Optional —</option>
+                            <option value="happy">😊 Happy</option>
+                            <option value="stressed">😓 Stressed</option>
+                            <option value="tired">😴 Tired</option>
+                            <option value="neutral">😐 Neutral</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="hungerSelect" class="form-label">Hunger Level</label>
+                    <select id="hungerSelect" class="form-select">
+                        <option value="">— Optional —</option>
+                        <option value="very-hungry">🔥 Very Hungry</option>
+                        <option value="moderate">😋 Moderately Hungry</option>
+                        <option value="not-hungry">🤔 Not Really Hungry</option>
+                    </select>
+                </div>
+
+                <button id="analyzeBtn" class="btn-primary" onclick="analyzeFood()">
+                    <span class="btn-text">Analyze Meal</span>
+                    <span class="btn-loader" style="display:none;">
+                        <span class="spinner"></span> Analyzing...
+                    </span>
+                </button>
+            </div>
+
+            <!-- Results Card -->
+            <div class="glass-card results-card" id="resultsCard" style="display:none;">
+                <div id="resultsContent"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ HISTORY SECTION ═══ -->
+<section class="section" id="history">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">📊 Meal History</h2>
+            <p class="section-sub">Your nutrition journey over time</p>
+        </div>
+        <div class="history-grid">
+            <div class="glass-card chart-card">
+                <h3 class="card-title">7-Day Calorie Trend</h3>
+                <div class="chart-container">
+                    <canvas id="calorieChart"></canvas>
+                </div>
+            </div>
+            <div class="glass-card">
+                <h3 class="card-title">Recent Meals</h3>
+                <div id="mealList" class="meal-list">
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <p>No meals logged yet. Analyze and log your first meal!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ INSIGHTS SECTION ═══ -->
+<section class="section" id="insights">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">🧠 Smart Insights</h2>
+            <p class="section-sub">Patterns and personalized tips from your data</p>
+        </div>
+        <div id="insightsContent" class="insights-grid">
+            <div class="glass-card">
+                <div class="empty-state">
+                    <div class="empty-icon">💡</div>
+                    <p>Log a few meals to unlock personalized insights and pattern detection!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+    <div class="container">
+        <p class="footer-text">
+            🥗 NutriAI — Smart Nutrition Assistant &middot; Powered by Open Food Facts & USDA Data
+        </p>
+        <p class="footer-disclaimer">
+            ⚠️ This tool provides general nutrition information only. It is not medical advice. Consult a healthcare professional for dietary concerns.
+        </p>
+    </div>
+</footer>
+
+<!-- ═══ TOAST NOTIFICATION ═══ -->
+<div id="toast" class="toast-container"></div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
