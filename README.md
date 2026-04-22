@@ -56,4 +56,4 @@ NutriAI is an intelligent **Flask-based Food & Health web application** that hel
 
 ---
 
-## 📁 Project Structure
+
