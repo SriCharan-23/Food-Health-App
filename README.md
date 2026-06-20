@@ -60,4 +60,4 @@ Here is the deployed link of my project.
 https://food-health-app-743989753121.asia-south1.run.app/
 
 ---
-This project was done under a prompt-a-thon contest, which is AMD Slingshot, held on April 21, 2026, at Anurag University, Hyderabad
+**NOte:-** This project was done under a prompt-a-thon contest, which is AMD Slingshot, held on April 21, 2026, at Anurag University, Hyderabad
